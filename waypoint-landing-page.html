@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waypoint — Adventure Travel, Planned by People Who've Been There</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0B1F1C;
+    --deep: #0F2C27;
+    --paper: #F6F1E7;
+    --paper-dim: #EAE2D0;
+    --ember: #E0762B;
+    --ember-soft: #F0A868;
+    --moss: #7A8B6F;
+    --line: rgba(246, 241, 231, 0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .display {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 0;
+    background: linear-gradient(to bottom, rgba(15,44,39,0.9), transparent);
+  }
+  nav .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
+  }
+  .logo span { color: var(--ember-soft); }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+  .nav-links a {
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta {
+    border: 1px solid var(--line);
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-cta:hover { background: rgba(246,241,231,0.08); border-color: rgba(246,241,231,0.3); }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
+    background:
+      radial-gradient(ellipse 900px 500px at 82% 18%, rgba(224,118,43,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 600px at 10% 90%, rgba(122,139,111,0.14), transparent 60%),
+      var(--deep);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 64px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .eyebrow {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--ember-soft);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--ember-soft);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 5vw, 4.4rem);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--ember-soft);
+  }
+
+  .hero p.lede {
+    margin-top: 26px;
+    font-size: 1.12rem;
+    line-height: 1.6;
+    color: rgba(246,241,231,0.72);
+    max-width: 480px;
+  }
+
+  .hero-actions {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .btn-primary {
+    background: var(--ember);
+    color: var(--ink);
+    font-weight: 600;
+    padding: 15px 30px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.96rem;
+    display: inline-block;
+    transition: transform 0.2s ease, background 0.2s;
+  }
+  .btn-primary:hover { background: var(--ember-soft); transform: translateY(-2px); }
+
+  .btn-ghost {
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.85;
+  }
+  .btn-ghost .ring {
+    width: 34px; height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+  }
+
+  .hero-stats {
+    margin-top: 64px;
+    display: flex;
+    gap: 48px;
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--paper);
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    color: rgba(246,241,231,0.55);
+    margin-top: 4px;
+  }
+
+  /* ---------- ROUTE SIGNATURE (SVG) ---------- */
+  .route-panel {
+    position: relative;
+    aspect-ratio: 3/4;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: linear-gradient(160deg, rgba(246,241,231,0.05), rgba(246,241,231,0.01));
+    overflow: hidden;
+  }
+  .route-panel svg { width: 100%; height: 100%; }
+
+  .route-tag {
+    position: absolute;
+    bottom: 22px; left: 22px; right: 22px;
+    background: rgba(11,31,28,0.72);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .route-tag .mono { font-size: 0.72rem; color: var(--ember-soft); }
+  .route-tag .rt-title { font-family:'Fraunces',serif; font-size: 1.05rem; margin-top: 4px; }
+
+  .path-line {
+    stroke: var(--ember-soft);
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 6 7;
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+  .path-dot { fill: var(--paper); }
+  .path-dot.active { fill: var(--ember); }
+  .path-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    fill: rgba(246,241,231,0.65);
+  }
+
+  /* ---------- STRIP ---------- */
+  .strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 22px 0;
+  }
+  .strip .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.82rem;
+    color: rgba(246,241,231,0.5);
+  }
+  .strip .mono { color: rgba(246,241,231,0.65); }
+
+  /* ---------- SECTION SHELL ---------- */
+  section { padding: 120px 0; }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+    gap: 40px;
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 3.4vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.15;
+    max-width: 560px;
+  }
+  .section-head p {
+    max-width: 320px;
+    color: rgba(246,241,231,0.6);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- JOURNEYS ---------- */
+  .journeys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .journey-card {
+    background: var(--deep);
+    padding: 40px 32px;
+    position: relative;
+    transition: background 0.25s;
+  }
+  .journey-card:hover { background: rgba(246,241,231,0.03); }
+  .journey-idx {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ember-soft);
+  }
+  .journey-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 18px;
+  }
+  .journey-card .region {
+    font-size: 0.82rem;
+    color: rgba(246,241,231,0.5);
+    margin-top: 6px;
+  }
+  .journey-card p {
+    margin-top: 18px;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(246,241,231,0.68);
+  }
+  .journey-meta {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+  }
+  .journey-meta .price { color: var(--ember-soft); font-weight: 600; }
+
+  /* ---------- APPROACH ---------- */
+  .approach {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 80px;
+  }
+  .approach-list { display: flex; flex-direction: column; }
+  .approach-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    padding: 30px 0;
+    border-top: 1px solid var(--line);
+  }
+  .approach-item:last-child { border-bottom: 1px solid var(--line); }
+  .approach-item .mono { font-size: 0.8rem; color: var(--ember-soft); padding-top: 3px; }
+  .approach-item h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .approach-item p {
+    font-size: 0.92rem;
+    color: rgba(246,241,231,0.65);
+    line-height: 1.6;
+    max-width: 420px;
+  }
+
+  .approach-visual {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 44px;
+    background: linear-gradient(160deg, rgba(224,118,43,0.08), rgba(246,241,231,0.02));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .quote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 4rem;
+    color: var(--ember-soft);
+    line-height: 1;
+    opacity: 0.6;
+  }
+  .approach-visual blockquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.45;
+    font-weight: 500;
+    margin-top: 12px;
+  }
+  .approach-visual .attrib {
+    margin-top: 28px;
+    font-size: 0.85rem;
+    color: rgba(246,241,231,0.6);
+  }
+  .approach-visual .attrib strong { color: var(--paper); }
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band {
+    border-radius: 24px;
+    background: linear-gradient(135deg, #16352E, #0B1F1C);
+    border: 1px solid var(--line);
+    padding: 80px 64px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(224,118,43,0.22), transparent 70%);
+    top: -200px; right: -150px;
+  }
+  .cta-band h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.15;
+    position: relative;
+  }
+  .cta-band p {
+    margin-top: 20px;
+    color: rgba(246,241,231,0.65);
+    font-size: 1rem;
+    position: relative;
+  }
+  .cta-band .hero-actions { justify-content: center; margin-top: 36px; position: relative; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 56px 0 40px;
+  }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  footer .foot-links {
+    display: flex;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+  footer .foot-col h5 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: rgba(246,241,231,0.4);
+    margin-bottom: 14px;
+    letter-spacing: 0.06em;
+  }
+  footer .foot-col a {
+    display: block;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: rgba(246,241,231,0.75);
+    margin-bottom: 10px;
+  }
+  footer .foot-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: rgba(246,241,231,0.4);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .route-panel { max-width: 420px; }
+    .hero-stats { flex-wrap: wrap; gap: 32px; }
+    .journeys { grid-template-columns: 1fr; }
+    .approach { grid-template-columns: 1fr; gap: 40px; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+    .cta-band { padding: 56px 28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ember-soft);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">Way<span>point</span></div>
+    <div class="nav-links">
+      <a href="#journeys">Journeys</a>
+      <a href="#approach">Approach</a>
+      <a href="#footer">Contact</a>
+    </div>
+    <a href="#footer" class="nav-cta">Plan a trip</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow mono">SMALL-GROUP EXPEDITIONS · EST. 2016</div>
+      <h1 class="display">Travel like someone <em>who's already been</em> where you're going.</h1>
+      <p class="lede">We plan expeditions the way a good local friend would — routes shaped by ten years of walking them ourselves, not pulled from a brochure.</p>
+      <div class="hero-actions">
+        <a href="#journeys" class="btn-primary">See upcoming journeys</a>
+        <a href="#approach" class="btn-ghost"><span class="ring">↓</span> How we plan</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">14</div>
+          <div class="stat-label">Countries guided in-house</div>
+        </div>
+        <div>
+          <div class="stat-num">6</div>
+          <div class="stat-label">Max travelers per group</div>
+        </div>
+        <div>
+          <div class="stat-num">9.4k</div>
+          <div class="stat-label">Trail miles logged by our guides</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="route-panel">
+      <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid slice">
+        <path class="path-line" d="M 60 460 C 100 420, 70 360, 120 320 S 220 280, 200 220 S 130 160, 180 100 S 300 70, 280 40" />
+        <circle class="path-dot active" cx="60" cy="460" r="5"/>
+        <circle class="path-dot" cx="120" cy="320" r="4"/>
+        <circle class="path-dot" cx="200" cy="220" r="4"/>
+        <circle class="path-dot" cx="180" cy="100" r="4"/>
+        <circle class="path-dot active" cx="280" cy="40" r="5"/>
+        <text class="path-label" x="72" y="464">DAY 1 · BASE CAMP</text>
+        <text class="path-label" x="130" y="316">RIDGE TRAIL</text>
+        <text class="path-label" x="210" y="216">HIGH PASS · 4100M</text>
+        <text class="path-label" x="150" y="96">GLACIER FIELD</text>
+        <text class="path-label" x="220" y="36">DAY 9 · SUMMIT</text>
+      </svg>
+      <div class="route-tag">
+        <div class="mono">CURRENT ROUTE</div>
+        <div class="rt-title display">Cordillera Huayhuash Circuit, Peru</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="mono">GUIDES ON THE GROUND, NOT A CALL CENTER</div>
+    <div class="mono">PATAGONIA · HIMALAYA · ATLAS · ANDES</div>
+    <div class="mono">NEXT DEPARTURE — MARCH 2027</div>
+  </div>
+</div>
+
+<section id="journeys">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Three routes we're guiding this season.</h2>
+      <p>Every trip is capped at six travelers and led by a guide who has run the route at least a dozen times before.</p>
+    </div>
+
+    <div class="journeys">
+      <div class="journey-card">
+        <div class="journey-idx mono">ROUTE 01</div>
+        <h3 class="display">Huayhuash Circuit</h3>
+        <div class="region">Peru · 9 days</div>
+        <p>A high-altitude loop through the range Joe Simpson made famous — glacial lakes, 4,000m passes, and camps with no one else in sight.</p>
+        <div class="journey-meta">
+          <span>Moderate–Strenuous</span>
+          <span class="price">from $2,450</span>
+        </div>
+      </div>
+
+      <div class="journey-card">
+        <div class="journey-idx mono">ROUTE 02</div>
+        <h3 class="display">Torres del Paine Traverse</h3>
+        <div class="region">Chile · 7 days</div>
+        <p>The full "O" circuit away from the day-hiker crowds, timed for the shoulder season when the granite towers are yours alone.</p>
+        <div class="journey-meta">
+          <span>Moderate</span>
+          <span class="price">from $2,190</span>
+        </div>
+      </div>
+
+      <div class="journey-card">
+        <div class="journey-idx mono">ROUTE 03</div>
+        <h3 class="display">M'Goun Traverse</h3>
+        <div class="region">Morocco · 6 days</div>
+        <p>Berber villages, cedar valleys, and a summit push most tour groups skip entirely because it takes patience to plan properly.</p>
+        <div class="journey-meta">
+          <span>Moderate</span>
+          <span class="price">from $1,780</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="wrap approach">
+    <div>
+      <div class="section-head" style="margin-bottom: 8px; display:block;">
+        <h2>How a Waypoint trip actually gets planned.</h2>
+      </div>
+
+      <div class="approach-list">
+        <div class="approach-item">
+          <div class="mono">01</div>
+          <div>
+            <h4 class="display">A guide walks it first</h4>
+            <p>No route goes on the calendar until one of our guides has hiked it themselves this season, weather included.</p>
+          </div>
+        </div>
+        <div class="approach-item">
+          <div class="mono">02</div>
+          <div>
+            <h4 class="display">We cap the group at six</h4>
+            <p>Small enough to move fast, stay flexible with weather, and get real time with the guide instead of a headcount.</p>
+          </div>
+        </div>
+        <div class="approach-item">
+          <div class="mono">03</div>
+          <div>
+            <h4 class="display">Local outfitters, paid fairly</h4>
+            <p>Porters, cooks, and drivers are hired directly and paid above the regional standard — not routed through a middleman.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approach-visual">
+      <div>
+        <div class="quote-mark">"</div>
+        <blockquote>Every other operator sent us a PDF. Waypoint sent their guide's actual trail notes from three weeks earlier.</blockquote>
+      </div>
+      <div class="attrib">
+        <strong>Renata Kowalski</strong><br>
+        Huayhuash Circuit, October cohort
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <h2 class="display">Next season's routes are open for six travelers each.</h2>
+      <p>Tell us where you're drawn to, and a guide who's actually been there will reply — not a booking script.</p>
+      <div class="hero-actions">
+        <a href="#footer" class="btn-primary">Start planning your route</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="wrap">
+    <div>
+      <div class="logo">Way<span>point</span></div>
+      <p style="margin-top: 16px; max-width: 220px; font-size: 0.85rem; color: rgba(246,241,231,0.5); line-height: 1.6;">Small-group expeditions, planned by the guides who run them.</p>
+    </div>
+    <div class="foot-links">
+      <div class="foot-col">
+        <h5>Routes</h5>
+        <a href="#journeys">Peru</a>
+        <a href="#journeys">Chile</a>
+        <a href="#journeys">Morocco</a>
+      </div>
+      <div class="foot-col">
+        <h5>Studio</h5>
+        <a href="#approach">Our approach</a>
+        <a href="#footer">Guides</a>
+        <a href="#footer">Journal</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="mailto:hello@waypoint.example">hello@waypoint.example</a>
+        <a href="#footer">+1 (406) 555-0119</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© 2026 Waypoint Expeditions</span>
+    <span>Designed &amp; built as a portfolio sample</span>
+  </div>
+</footer>
+
+</body>
+</html>
